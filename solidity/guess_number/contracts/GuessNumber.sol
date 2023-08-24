@@ -2,8 +2,9 @@
 pragma solidity >=0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "../interfaces/IGuessNumber.sol";
 
-contract GuessNumber is Ownable {
+contract GuessNumber is Ownable, IGuessNumber {
 
     address payable[2] public players;
     uint16[2] public guessings;
@@ -42,7 +43,7 @@ contract GuessNumber is Ownable {
         }
     }
 
-    function reveal(bytes32 nonce, uint16 number) payable external {
+    function reveal(bytes32 nonce, uint16 number) payable external onlyOwner {
         require(!concluded, "GuessNumber: game already concluded");
         require(guessings[0] < 1000 && guessings[1] < 1000, "GuessNumber: both players must guess first");
         require(keccak256(abi.encodePacked(nonce)) == nonceHash, "GuessNumber: invalid nonce");
@@ -60,9 +61,9 @@ contract GuessNumber is Ownable {
                 }
             }
         }
-        // TODO: given money
+
         if (winner != address(0)) {
-            winner.transfer(address(this).balance);
+            payable(winner).transfer(address(this).balance);
         } else {
             uint256 amount = address(this).balance / 2;
             players[0].transfer(amount);
