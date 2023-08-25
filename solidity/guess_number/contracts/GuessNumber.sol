@@ -69,6 +69,7 @@ contract GuessNumber is Ownable, IGuessNumber {
             payable(players[0]).transfer(amount);
             payable(players[1]).transfer(amount);
         }
+        concluded = true;
     }
 
     function absMinus(uint16 a, uint16 b) private pure returns (uint16) {

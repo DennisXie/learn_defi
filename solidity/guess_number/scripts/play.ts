@@ -9,6 +9,7 @@ var player0PrivateKey: string = "";
 var player1Address: string = ""
 var player1PrivateKey: string = "";
 let provider = ethers.getDefaultProvider("http://localhost:8545");
+const coin = "1";
 
 async function ether_add_player() {
     const player0 = player0Address;
@@ -33,7 +34,7 @@ async function guessNumber(playerPrivateKey: string, num: number) {
     let player = new ethers.Wallet(playerPrivateKey, provider);
 
     const contract = GuessNumber__factory.connect(contractAddress, player);
-    const txn = await contract.guess(num, {gasLimit: 670_000, value: ethers.parseEther("2")});
+    const txn = await contract.guess(num, {gasLimit: 670_000, value: ethers.parseEther(coin)});
     const result = await txn.wait();
     console.log(result);
     await show();
@@ -61,7 +62,7 @@ async function show() {
 
 
 async function main() {
-    contractAddress = "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0";
+    contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
     hostAddress = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
     hostPrivateKey = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
     player0Address = "0x90F79bf6EB2c4f870365E785982E1f101E93b906";
@@ -70,9 +71,9 @@ async function main() {
     player1PrivateKey = "0x47e179ec197488593b187f80a00eb0da91f1b9d0b13f8733639f19c30a34926a";
     await ether_add_player();
     console.log("player0 guess");
-    await guessNumber(player0PrivateKey, 1);
+    await guessNumber(player0PrivateKey, 14);
     console.log("player1 guess");
-    await guessNumber(player1PrivateKey, 10);
+    await guessNumber(player1PrivateKey, 16);
     console.log("now reveal");
     await reveal();
     await show();
