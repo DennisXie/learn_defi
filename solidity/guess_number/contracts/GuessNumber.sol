@@ -6,7 +6,7 @@ import "../interfaces/IGuessNumber.sol";
 
 contract GuessNumber is Ownable, IGuessNumber {
 
-    address payable[2] public players;
+    address[2] public players;
     uint16[2] public guessings;
     bool public concluded = false;
     bytes32 private nonceHash;
@@ -66,8 +66,8 @@ contract GuessNumber is Ownable, IGuessNumber {
             payable(winner).transfer(address(this).balance);
         } else {
             uint256 amount = address(this).balance / 2;
-            players[0].transfer(amount);
-            players[1].transfer(amount);
+            payable(players[0]).transfer(amount);
+            payable(players[1]).transfer(amount);
         }
     }
 
